@@ -11,4 +11,5 @@ router.get("/me", (req, res) => {
   }
 });
 
+router.use("/me/watch-list", require('./watchListApiRoute'));
 module.exports = router;

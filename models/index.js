@@ -1,4 +1,4 @@
 module.exports = {
-    Article: require("./Article"),
+    WatchListItem: require("./WatchListItem"),
     User: require("./User")
 };
