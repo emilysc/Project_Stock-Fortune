@@ -9,7 +9,6 @@ router.get("/:watchList", (req, res) => {
       "error": "Please login."
     });
   }
-  console.log(db);
 
   db.WatchListItem.find({
     user: req.user,
@@ -30,7 +29,7 @@ router.post("/:watchList", (req, res) => {
       "error": "Please login."
     });
   }
-  console.log(req);
+
   if (req.params.watchList !== 'default') {
     res.status(400).json({
       "error": "invalid watch list name."

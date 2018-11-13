@@ -1,3 +1,4 @@
+const process = require("process");
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -17,7 +18,7 @@ app.use(passport.session());
 
 // Serve up static assets (usually on heroku)
 //if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
+app.use(express.static("client/build"));
 //}
 
 // Connect to the Mongo DB
@@ -26,10 +27,14 @@ var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/nytreact";
 // Set mongoose to leverage built in JavaScript ES6 Promises
 // Connect to the Mongo DB
 mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true }, function (error) {
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+});
 
 const db = require("./models");
-
 
 // Google intergation
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
@@ -51,11 +56,10 @@ passport.use(new GoogleStrategy({
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
   callbackURL: process.env.NODE_ENV === "production" ?
-    "http://www.example.com/auth/google/callback" :
+    "https://emily-stock-fortune.herokuapp.com/auth/google/callback" :
     `http://localhost:${PORT}/auth/google/callback`
 },
   function (accessToken, refreshToken, profile, cb) {
-    console.log(profile);
     db.User.findOneAndUpdate(
       { googleId: profile.id },
       {
@@ -65,7 +69,6 @@ passport.use(new GoogleStrategy({
       },
       { new: true, upsert: true },
       function (err, user) {
-        console.log(user);
         return cb(err, user);
       }
     );
@@ -76,13 +79,13 @@ app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile'] }));
 
 app.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  passport.authenticate('google', { failureRedirect: '/' }),
   function (req, res) {
     // Successful authentication, redirect home.
     res.redirect('/');
   }
 );
-app.get('/auth/logout', function(req, res){
+app.get('/auth/logout', function (req, res) {
   req.logout();
   res.redirect('/');
 });

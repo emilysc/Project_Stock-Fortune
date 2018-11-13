@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Dashboard from "./components/Dashboard";
 import Jumbotron from "./components/Jumbotron";
-
 import axios from 'axios';
 
 class App extends Component {

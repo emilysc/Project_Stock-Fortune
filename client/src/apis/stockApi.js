@@ -11,6 +11,12 @@ export function queryOneSymbol(symbol, types = defaultTypes) {
                 throw new Error("API error");
             }
             return res.data;
+        }, error => {
+            if (error.response.data === 'Unknown symbol') {
+                alert('unknown symbol.');
+            } else {
+                console.error(error);
+            }
         });
 }
 

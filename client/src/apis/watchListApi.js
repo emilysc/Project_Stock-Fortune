@@ -20,7 +20,6 @@ export function addSymbolToWatchList(id, symbol) {
     return axios
         .post(`${baseUri}/${id}`, { symbol })
         .then(res => {
-            debugger;
             if (res.status !== 200) {
                 throw new Error("API error");
             }
