@@ -11,6 +11,7 @@ Features highlights:
 - Save your search for future tracking on stock pricing
 - Delete your stock trading price from the app if needed
 - User need to login to view their stock tracker via Google authentication
+- Mobile friendly
 
 _____________________________________________________________________________________________________
 Front-end technology applied
